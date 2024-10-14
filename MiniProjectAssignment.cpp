@@ -80,25 +80,30 @@ class SinglyLinkedlist
 //==========================================================================
     void deleteNode(int value)
     {
-        if(head = NULL)
-        {
-            return;
-        }
-
         if(head->data == value){
             Node* temp = head;
-            head = head->next;
+            head = temp->next;
             delete temp;
-            return;
         }
         Node *current = head;
         Node *prev = NULL;
 
-        if(current == NULL){
-            return;
+        while (current != NULL)
+        {
+            if (current->data == value)
+            {
+                prev->next = current->next;
+                delete current;
+                break;
+            }
+            prev = current;
+            current = current->next;
         }
-        prev->next = current->next;
-        delete current;
+        // if(current == NULL){
+        //     return;
+        // }
+        // prev->next = current->next;
+        // delete current;
     }
 //==========================================================================
     void findMiddle(){
@@ -154,6 +159,24 @@ class SinglyLinkedlist
             temp->next = cycleNode;
         }
     }
+//==========================================================================
+    bool seatInList(int seat)
+    {
+        if (head == NULL)
+        {
+            return false;
+        }
+        Node* current = head;
+        while (current != NULL)
+        {
+            if (current->data == seat)
+            {
+                return true;
+            }
+            current = current->next;
+        }
+        return false;
+    }
 };
 
 //==========================================================================
@@ -179,6 +202,11 @@ int main()
         case 1:
             cout << "Enter seat number to book" << endl;
             cin >> seatNumber;
+            if (bookingSystem.seatInList(seatNumber))
+            {
+                cout << "Enter an available seat." << endl;
+                break;
+            }
             bookingSystem.insertAtHead(seatNumber);
             cout << "Seat " << seatNumber << " has been booked." << endl;
             //cout << "Explanation: The user chooses to book a seat and enters seat number " << seatNumber << ". The system adds this seat to the list." << endl;
@@ -186,9 +214,16 @@ int main()
         case 2:
             cout << "Enter seat number to cancel" << endl;
             cin >> seatNumber;
-            if(seatNumber )
-            bookingSystem.deleteNode(seatNumber);
-            cout << "Seat " << seatNumber << " has been cancelled." << endl;
+            if(bookingSystem.seatInList(seatNumber))
+            {
+                cout << "its in list" << endl;
+                bookingSystem.deleteNode(seatNumber);
+                cout << "Seat " << seatNumber << " has been cancelled." << endl;
+            }
+            else
+            {
+                cout << "Seat is not booked. Please enter a booked seat." << endl;
+            }
             break;
         case 3:
             cout << "Available Seats: " << endl;
